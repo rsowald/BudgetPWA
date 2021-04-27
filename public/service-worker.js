@@ -3,8 +3,8 @@ const FILES_TO_CACHE = [
     "/manifest.json",
     "/styles.css",
     "/images/money_background.jpg",
-    "/images/icon/icon-192x192.png",
-    "/images/icon/icon-512x512.png",
+    "/images/icons/icon-192x192.png",
+    "/images/icons/icon-512x512.png",
     "/dist/bundle.js",
     "https://cdn.jsdelivr.net/npm/chart.js@2.8.0",
     "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
