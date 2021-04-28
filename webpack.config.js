@@ -4,7 +4,6 @@ const path = require("path");
 const config = {
     mode: "development",
 
-    // add entry points for JavaScript files for the three pages, home, detail, and favorites.
     entry: "./public/index.js",
 
     output: {
