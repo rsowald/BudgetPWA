@@ -1,38 +1,40 @@
 const FILES_TO_CACHE = [
     "/",
-    "dist/manifest.json",
+    "manifest.json",
     "styles.css",
     "images/money_background.jpg",
-    "dist/assets/icons/icon_192x192.png",
-    "dist/assets/icons/icon_512x512.png",
-    "dist/bundle.js",
+    "images/icons/icon_192x192.png",
+    "images/icons/icon_512x512.png",
+    "db.js",
+    "index.js",
     "https://cdn.jsdelivr.net/npm/chart.js@2.8.0",
     "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
 ];
 
-const STATIC_CACHE = "static-cache-v1";
-const RUNTIME_CACHE = "runtime-cache";
+const PRECACHE = 'precache-v1';
+const RUNTIME = 'runtime';
 
-self.addEventListener("install", event => {
+self.addEventListener('install', (event) => {
     event.waitUntil(
         caches
-            .open(STATIC_CACHE)
-            .then(cache => cache.addAll(FILES_TO_CACHE))
-            .then(() => self.skipWaiting())
+            .open(PRECACHE)
+            .then((cache) => cache.addAll(FILES_TO_CACHE))
+            .then(self.skipWaiting())
     );
 });
 
-self.addEventListener("activate", event => {
-    const currentCaches = [STATIC_CACHE, RUNTIME_CACHE];
+// The activate handler takes care of cleaning up old caches.
+self.addEventListener('activate', (event) => {
+    const currentCaches = [PRECACHE, RUNTIME];
     event.waitUntil(
         caches
             .keys()
-            .then(cacheNames => {
-                return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+            .then((cacheNames) => {
+                return cacheNames.filter((cacheName) => !currentCaches.includes(cacheName));
             })
-            .then(cachesToDelete => {
+            .then((cachesToDelete) => {
                 return Promise.all(
-                    cachesToDelete.map(cacheToDelete => {
+                    cachesToDelete.map((cacheToDelete) => {
                         return caches.delete(cacheToDelete);
                     })
                 );
@@ -41,21 +43,22 @@ self.addEventListener("activate", event => {
     );
 });
 
-self.addEventListener("fetch", event => {
+self.addEventListener('fetch', (event) => {
     if (event.request.url.startsWith(self.location.origin)) {
         event.respondWith(
-            caches.match(event.request)
-                .then((cachedResponse) => {
-                    if (cachedResponse) { return cachedResponse }
-                    return caches.open(RUNTIME_CACHE)
-                        .then((cache) => {
-                            return fetch(event.request)
-                                .then((response) => {
-                                    return cache.put(event.request, response.clone())
-                                        .then(() => { return response })
-                                })
-                        })
-                })
-        )
+            caches.match(event.request).then((cachedResponse) => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+
+                return caches.open(RUNTIME).then((cache) => {
+                    return fetch(event.request).then((response) => {
+                        return cache.put(event.request, response.clone()).then(() => {
+                            return response;
+                        });
+                    });
+                });
+            })
+        );
     }
 });
