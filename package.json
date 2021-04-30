@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "webpack --watch",
     "lite-server": "lite-server"
   },
   "repository": {
@@ -30,9 +29,6 @@
     "@babel/core": "^7.13.16",
     "@babel/preset-env": "^7.13.15",
     "babel-loader": "^8.2.2",
-    "babel-plugin-dynamic-import-webpack": "^1.1.0",
-    "webpack": "^5.35.1",
-    "webpack-cli": "^4.6.0",
-    "webpack-pwa-manifest": "^4.3.0"
+    "babel-plugin-dynamic-import-webpack": "^1.1.0"
   }
 }
